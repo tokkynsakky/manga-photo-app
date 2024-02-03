@@ -1,5 +1,61 @@
 .App {
   text-align: center;
+  background-color: black;
+}
+
+.Main {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  position: relative;
+  padding: 0.3em 0.5em;
+  background: -webkit-linear-gradient(to top, rgb(137, 184, 255), #c5ceff);
+  background: linear-gradient(to top, rgb(137, 184, 255), #c5ceff);
+  color: #495193;
+}
+
+.Video-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-button {
+  display: inline-block;
+  position: relative;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  color: #000;
+  transition: 0.4s;
+  width: 180px;
+  height: 60px;
+  font-size: 20px;
+}
+.camera-button:hover {
+  color: #ff7f7f;
+}
+.camera-button:before,
+.camera-button:after {
+  position: absolute;
+  top: 0;
+  content: "";
+  width: 8px;
+  height: 100%;
+  display: inline-block;
+}
+.camera-button:before {
+  border-left: solid 1px #ff7f7f;
+  border-top: solid 1px #ff7f7f;
+  border-bottom: solid 1px #ff7f7f;
+  left: 0;
+}
+.camera-button:after {
+  content: "";
+  border-top: solid 1px #ff7f7f;
+  border-right: solid 1px #ff7f7f;
+  border-bottom: solid 1px #ff7f7f;
+  right: 0;
 }
 
 .App-logo {
@@ -11,21 +67,6 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
