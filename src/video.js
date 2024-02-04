@@ -79,6 +79,15 @@ function Video() {
     );
 
     clearphoto();
+    let frameCount = 0;
+
+    function animate() {
+      frameCount++;
+      drawBackground(canvas.getContext("2d"), frameCount);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   }
 
   function clearphoto() {
@@ -154,6 +163,32 @@ function Video() {
     context.fillText("晩御飯は二回食べます!!!", 70, 80);
 
     return context;
+  }
+
+  function drawBackground(context, frameCount) {
+    // 背景をクリア
+    context.clearRect(0, 0, width, height);
+
+    // アニメーションの要素を描画
+    const radius = 20;
+    const x =
+      Math.sin(frameCount * 0.05) * (width - radius) * 0.5 + width * 0.5;
+    const y =
+      Math.cos(frameCount * 0.05) * (height - radius) * 0.5 + height * 0.5;
+
+    context.beginPath();
+    context.arc(x, y, radius, 0, 2 * Math.PI);
+    context.fillStyle = getRandomColor();
+    context.fill();
+  }
+
+  function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   window.addEventListener("load", startup, false);
