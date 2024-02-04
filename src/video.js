@@ -97,7 +97,9 @@ function Video() {
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
 
-      context = imageProcessing(context);
+      // context = imageProcessing(context);
+      context = cartoonize(context);
+      context = addComicElements(context);
 
       const data_ = canvas.toDataURL("image/png");
       photo.setAttribute("src", data_);
@@ -106,26 +108,50 @@ function Video() {
     }
   }
 
-  function imageProcessing(context) {
-    // グレースケールに変換
+  function cartoonize(context) {
+    // エッジ検出
     const imageData = context.getImageData(0, 0, width, height);
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
-      // RGB 値を取得
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
+      const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      const edge = gray < 100 ? 0 : 255;
 
-      // グレースケールに変換
-      const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
-
-      // 各ピクセルをグレースケールに設定
-      data[i] = data[i + 1] = data[i + 2] = grayscale;
+      data[i] = edge;
+      data[i + 1] = edge;
+      data[i + 2] = edge;
     }
 
-    // 変換後のデータを Canvas に描画
     context.putImageData(imageData, 0, 0);
+
+    // トーンの調整
+    context.fillStyle = "rgba(255, 255, 255, 0.1)";
+    context.fillRect(0, 0, width, height);
+
+    return context;
+  }
+
+  function addComicElements(context) {
+    // テキストを描画
+    context.font = "20px Comic Sans MS";
+
+    // 吹き出しを描画
+    context.beginPath();
+    context.moveTo(50, 50);
+    context.lineTo(300, 50);
+    context.lineTo(300, 100);
+    context.lineTo(100, 100);
+    context.lineTo(80, 130);
+    context.lineTo(60, 100);
+    context.lineTo(50, 100);
+    context.closePath();
+    context.fillStyle = "white";
+    context.fill();
+    context.lineWidth = 2;
+    context.strokeStyle = "black";
+    context.stroke();
+    context.fillStyle = "black";
+    context.fillText("晩御飯は二回食べます!!!", 70, 80);
 
     return context;
   }
