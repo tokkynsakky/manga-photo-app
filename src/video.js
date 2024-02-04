@@ -91,17 +91,43 @@ function Video() {
   }
 
   function takepicture() {
-    const context = canvas.getContext("2d");
+    let context = canvas.getContext("2d");
     if (width && height) {
       canvas.width = width;
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
 
-      const data = canvas.toDataURL("image/png");
-      photo.setAttribute("src", data);
+      context = imageProcessing(context);
+
+      const data_ = canvas.toDataURL("image/png");
+      photo.setAttribute("src", data_);
     } else {
       clearphoto();
     }
+  }
+
+  function imageProcessing(context) {
+    // グレースケールに変換
+    const imageData = context.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      // RGB 値を取得
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      // グレースケールに変換
+      const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+
+      // 各ピクセルをグレースケールに設定
+      data[i] = data[i + 1] = data[i + 2] = grayscale;
+    }
+
+    // 変換後のデータを Canvas に描画
+    context.putImageData(imageData, 0, 0);
+
+    return context;
   }
 
   window.addEventListener("load", startup, false);
