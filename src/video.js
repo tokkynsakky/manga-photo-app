@@ -37,7 +37,13 @@ function Video() {
       .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         video.srcObject = stream;
-        video.play();
+        var playPromise = video.play();
+
+        // video.play(); とするとエラーが出るので以下を参考に修正
+        // https://goo.gl/LdLk22
+        if (playPromise !== undefined) {
+          playPromise.then((_) => {}).catch((error) => {});
+        }
       })
       .catch((err) => {
         console.error(`An error occurred: ${err}`);
@@ -101,16 +107,19 @@ function Video() {
   window.addEventListener("load", startup, false);
 
   return (
-    <div className="contentarea">
-      <div className="camera">
-        <video id="video">Video stream not available.</video>
-        <button id="startbutton">Take photo</button>
+    <>
+      <h1 className="Title">漫画風写真撮影アプリ</h1>
+      <div className="contentarea">
+        <div className="camera">
+          <video id="video">Video stream not available.</video>
+          <button id="startbutton">Take photo</button>
+        </div>
+        <canvas id="canvas"> </canvas>
+        <div className="output">
+          <img id="photo" alt="The screen capture will appear in this box." />
+        </div>
       </div>
-      <canvas id="canvas"> </canvas>
-      <div className="output">
-        <img id="photo" alt="The screen capture will appear in this box." />
-      </div>
-    </div>
+    </>
   );
 }
 

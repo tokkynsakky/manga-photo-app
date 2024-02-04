@@ -5,7 +5,7 @@ import Video from "./video";
 function App() {
   return (
     <div className="Main">
-      <img src={logo} className="App-logo" alt="logo" />
+      {/* <img src={logo} className="App-logo" alt="logo" /> */}
       <Video />
     </div>
   );
